@@ -1,0 +1,159 @@
+CREATE DATABASE IF NOT EXISTS playas_oaxaca;
+USE playas_oaxaca;
+
+-- Tabla UBICACION
+CREATE TABLE ubicacion (
+    id_ubicacion INT AUTO_INCREMENT PRIMARY KEY,
+    direccion VARCHAR(150) NOT NULL,
+    municipio VARCHAR(100) NOT NULL,
+    coordenadas VARCHAR(100)
+);
+
+-- Tabla POPULARIDAD
+CREATE TABLE popularidad (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    facilidad_acceso VARCHAR(100),
+    costo_entrada DECIMAL(6,2),
+    visitantes_mensuales INT,
+    e_popularidad INT
+);
+
+-- Tabla CARACTERISTICAS
+CREATE TABLE caracteristicas (
+    id_caracteristicas INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_arena VARCHAR(100),
+    tipo_mar VARCHAR(100),
+    oleaje VARCHAR(100),
+    extension DECIMAL(5,2)
+);
+
+-- Tabla AMBIENTE
+CREATE TABLE ambiente (
+    id_ambiente INT AUTO_INCREMENT PRIMARY KEY,
+    protegida BOOLEAN,
+    especies_migratorias TEXT,
+    nivel_contaminacion VARCHAR(100)
+);
+
+-- Tabla ACTIVIDADES
+CREATE TABLE actividades (
+    id_actividad INT AUTO_INCREMENT PRIMARY KEY,
+    surf BOOLEAN,
+    buceo BOOLEAN,
+    camping BOOLEAN,
+    nudismo_permitido BOOLEAN
+);
+
+-- Tabla PLAYA
+CREATE TABLE playa (
+    id_playa INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    id_ubicacion INT,
+    id_caracteristicas INT,
+    id_ambiente INT,
+    id_popularidad INT,
+    id_actividad INT,
+    FOREIGN KEY (id_ubicacion) REFERENCES ubicacion(id_ubicacion),
+    FOREIGN KEY (id_caracteristicas) REFERENCES caracteristicas(id_caracteristicas),
+    FOREIGN KEY (id_ambiente) REFERENCES ambiente(id_ambiente),
+    FOREIGN KEY (id_popularidad) REFERENCES popularidad(id),
+    FOREIGN KEY (id_actividad) REFERENCES actividades(id_actividad)
+
+
+INSERT INTO ubicacion (direccion, municipio, coordenadas) VALUES
+('Brisas de Zicatela', 'San Pedro Mixtepec', '15.8619,-97.0672'),
+('Mazunte', 'Santa María Tonameca', '15.6644,-96.5531'),
+('Zipolite', 'San Pedro Pochutla', '15.6625,-96.5136'),
+('San Agustinillo', 'Santa María Tonameca', '15.6629,-96.5290'),
+('Bahías de Huatulco', 'Santa María Huatulco', ’15.7680,-96.1350');
+
+
+INSERT INTO caracteristicas (tipo_arena, tipo_mar, oleaje, extension) VALUES
+('Fina y gris', 'Pacífico', 'Fuerte', 3.0),       -- Zicatela
+('Dorada', 'Pacífico', 'Moderado', 1.0),          -- Mazunte
+('Fina y dorada', 'Pacífico', 'Fuerte', 1.75),    -- Zipolite
+('Dorada', 'Pacífico', 'Moderado', 1.3),          -- San Agustinillo
+('Fina y blanca', 'Pacífico', 'Suave', 0.5);      -- Bahías de Huatulco
+
+INSERT INTO ambiente (protegida, especies_migratorias, nivel_contaminacion) VALUES
+(FALSE, 'Ninguna', 'Medio'),                                          -- Zicatela
+(TRUE, 'Tortugas marinas, aves migratorias', 'Bajo'),                 -- Mazunte
+(FALSE, 'Delfines, ballenas', 'Medio'),                               -- Zipolite
+(TRUE, 'Tortugas marinas', 'Bajo'),                                   -- San Agustinillo
+(TRUE, 'Tortugas marinas, aves migratorias', 'Bajo');                 -- Bahías de Huatulco
+
+INSERT INTO ambiente (protegida, especies_migratorias, nivel_contaminacion) VALUES
+(FALSE, 'Ninguna', 'Medio'),                                          -- Zicatela
+(TRUE, 'Tortugas marinas, aves migratorias', 'Bajo'),                 -- Mazunte
+(FALSE, 'Delfines, ballenas', 'Medio'),                               -- Zipolite
+(TRUE, 'Tortugas marinas', 'Bajo'),                                   -- San Agustinillo
+(TRUE, 'Tortugas marinas, aves migratorias', 'Bajo');                 -- Bahías de Huatulco
+);
+
+INSERT INTO actividades (surf, buceo, camping, nudismo_permitido) VALUES
+(TRUE, FALSE, TRUE, FALSE),   -- Zicatela
+(FALSE, TRUE, TRUE, FALSE),   -- Mazunte
+(TRUE, TRUE, TRUE, TRUE),     -- Zipolite
+(FALSE, TRUE, TRUE, FALSE),   -- San Agustinillo
+(FALSE, TRUE, FALSE, FALSE);  -- Bahías de Huatulco
+
+INSERT INTO popularidad (facilidad_acceso, costo_entrada, visitantes_mensuales, e_popularidad) VALUES
+('Alta', 0.00, 30000, 9),    -- Zicatela
+('Media', 0.00, 20000, 8),   -- Mazunte
+('Media', 0.00, 15000, 7),   -- Zipolite
+('Media', 0.00, 10000, 6),   -- San Agustinillo
+('Alta', 0.00, 25000, 8);    -- Bahías de Huatulco
+
+INSERT INTO playa (nombre, id_ubicacion, id_caracteristicas, id_ambiente, id_popularidad, id_actividad) VALUES
+('Zicatela', 1, 1, 1, 1, 1),
+('Mazunte', 2, 2, 2, 2, 2),
+('Zipolite', 3, 3, 3, 3, 3),
+('San Agustinillo', 4, 4, 4, 4, 4),
+('Bahías de Huatulco', 5, 5, 5, 5, 5);
+-- UBICACION
+INSERT INTO ubicacion (direccion, municipio, coordenadas) VALUES
+('Puerto Ángel', 'San Pedro Pochutla', '15.6670,-96.4930'),
+('La Bocana', 'Santa María Huatulco', '15.7410,-96.1120'),
+('Playa Carrizalillo', 'Puerto Escondido', '15.8600,-97.0700'),
+('Playa Manzanillo', 'Puerto Escondido', '15.8605,-97.0705'),
+('Playa Estacahuite', 'Puerto Ángel', '15.6675,-96.4950');
+
+-- CARACTERISTICAS
+INSERT INTO caracteristicas (tipo_arena, tipo_mar, oleaje, extension) VALUES
+('Dorada', 'Pacífico', 'Moderado', 1.2),
+('Fina y blanca', 'Pacífico', 'Suave', 0.8),
+('Blanca', 'Pacífico', 'Moderado', 0.3),
+('Blanca', 'Pacífico', 'Moderado', 0.4),
+('Dorada', 'Pacífico', 'Suave', 0.6);
+
+-- AMBIENTE
+INSERT INTO ambiente (protegida, especies_migratorias, nivel_contaminacion) VALUES
+(FALSE, 'Delfines, tortugas', 'Medio'),
+(TRUE, 'Aves migratorias', 'Bajo'),
+(FALSE, 'Ninguna', 'Bajo'),
+(FALSE, 'Ninguna', 'Bajo'),
+(TRUE, 'Tortugas marinas', 'Bajo');
+
+-- ACTIVIDADES
+INSERT INTO actividades (surf, buceo, camping, nudismo_permitido) VALUES
+(FALSE, TRUE, TRUE, FALSE),
+(FALSE, TRUE, FALSE, FALSE),
+(TRUE, FALSE, FALSE, FALSE),
+(FALSE, TRUE, FALSE, FALSE),
+(FALSE, TRUE, TRUE, FALSE);
+
+-- POPULARIDAD
+INSERT INTO popularidad (facilidad_acceso, costo_entrada, visitantes_mensuales, e_popularidad) VALUES
+('Media', 0.00, 12000, 6),
+('Media', 0.00, 8000, 5),
+('Alta', 0.00, 18000, 7),
+('Alta', 0.00, 16000, 7),
+('Media', 0.00, 9000, 6);
+
+-- PLAYA
+INSERT INTO playa (nombre, id_ubicacion, id_caracteristicas, id_ambiente, id_popularidad, id_actividad) VALUES
+('Puerto Ángel', 6, 6, 6, 6, 6),
+('La Bocana', 7, 7, 7, 7, 7),
+('Playa Carrizalillo', 8, 8, 8, 8, 8),
+('Playa Manzanillo', 9, 9, 9, 9, 9),
+('Playa Estacahuite', 10, 10, 10, 10, 10);
