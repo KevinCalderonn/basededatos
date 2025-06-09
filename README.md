@@ -1,116 +1,113 @@
-# basededatos
-CREATE DATABASE IF NOT EXISTS hospital;
-USE hospital;
+
+CREATE DATABASE IF NOT EXISTS playas_oaxaca;
+USE playas_oaxaca;
 
 CREATE TABLE ubicacion (
-    id_ubicacion INT AUTO_INCREMENT PRIMARY KEY,
-    direccion VARCHAR(200) NOT NULL,
-    municipio VARCHAR(45) NOT NULL,
-    coordenadas VARCHAR(45)
+  id_ubicacion INT AUTO_INCREMENT PRIMARY KEY,
+  direccion VARCHAR(150) NOT NULL,
+  municipio VARCHAR(100) NOT NULL,
+  coordenadas VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE tipo (
-    id_tipo INT AUTO_INCREMENT PRIMARY KEY,
-    tipo VARCHAR(45) NOT NULL
+
+CREATE TABLE caracteristicas (
+  id_caracteristicas INT AUTO_INCREMENT PRIMARY KEY,
+  tipo_arena VARCHAR(100),
+  tipo_mar VARCHAR(100),
+  oleaje VARCHAR(100),
+  extension DECIMAL(5,2)
 );
 
-CREATE TABLE medicamento (
-    id_medicamento INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    precio DECIMAL(10,2) NOT NULL
+CREATE TABLE ambiente (
+  id_ambiente INT AUTO_INCREMENT PRIMARY KEY,
+  protegida TINYINT(1),
+  especies_migratorias TEXT,
+  nivel_contaminacion VARCHAR(100)
 );
 
-CREATE TABLE aparato (
-    id_aparato INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL
+CREATE TABLE popularidad (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  facilidad_acceso VARCHAR(100),
+  costo_entrada DECIMAL(6,2),
+  visitantes_mensuales INT,
+  e_popularidad INT
 );
 
-CREATE TABLE hospital (
-    id_hospital INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    ubicacion_id INT NOT NULL,
-    tipo_id INT NOT NULL,
-    FOREIGN KEY (ubicacion_id) REFERENCES ubicacion(id_ubicacion),
-    FOREIGN KEY (tipo_id) REFERENCES tipo(id_tipo)
+CREATE TABLE actividades (
+  id_actividad INT AUTO_INCREMENT PRIMARY KEY,
+  surf TINYINT(1),
+  buceo TINYINT(1),
+  camping TINYINT(1),
+  nudismo_permitido TINYINT(1)
 );
 
-CREATE TABLE paciente (
-    id_paciente INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    hospital_id INT NOT NULL,
-    FOREIGN KEY (hospital_id) REFERENCES hospital(id_hospital)
+CREATE TABLE playa (
+  id_playa INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  id_ubicacion INT,
+  id_caracteristicas INT,
+  id_ambiente INT,
+  id_popularidad INT,
+  id_actividad INT,
+  FOREIGN KEY (id_ubicacion) REFERENCES ubicacion(id_ubicacion) ON DELETE CASCADE,
+  FOREIGN KEY (id_caracteristicas) REFERENCES caracteristicas(id_caracteristicas) ON DELETE CASCADE,
+  FOREIGN KEY (id_ambiente) REFERENCES ambiente(id_ambiente) ON DELETE CASCADE,
+  FOREIGN KEY (id_popularidad) REFERENCES popularidad(id) ON DELETE CASCADE,
+  FOREIGN KEY (id_actividad) REFERENCES actividades(id_actividad) ON DELETE CASCADE
 );
 
-CREATE TABLE personal (
-    id_personal INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    rol VARCHAR(45) NOT NULL,
-    hospital_id INT NOT NULL,
-    FOREIGN KEY (hospital_id) REFERENCES hospital(id_hospital)
-);
 
-CREATE TABLE inventario_medicamentos (
-    hospital_id INT NOT NULL,
-    medicamento_id INT NOT NULL,
-    cantidad_stock INT NOT NULL,
-    precio_unitario DECIMAL(10,2) NOT NULL,
-    PRIMARY KEY (hospital_id, medicamento_id),
-    FOREIGN KEY (hospital_id) REFERENCES hospital(id_hospital),
-    FOREIGN KEY (medicamento_id) REFERENCES medicamento(id_medicamento)
-);
-
-CREATE TABLE hospital_has_aparato (
-    hospital_id INT NOT NULL,
-    aparato_id INT NOT NULL,
-    cantidad VARCHAR(45),
-    estado VARCHAR(45),
-    fecha_adquisicion DATE,
-    PRIMARY KEY (hospital_id, aparato_id),
-    FOREIGN KEY (hospital_id) REFERENCES hospital(id_hospital),
-    FOREIGN KEY (aparato_id) REFERENCES aparato(id_aparato)
-);
-
+--INSERTAR DATOS
 INSERT INTO ubicacion (direccion, municipio, coordenadas) VALUES
-    ('Av. Reforma 123', 'Oaxaca', '17.0603,-96.7256'),
-    ('Calle 5 de Mayo 456', 'Zaachila', '17.0436,-96.6461'),
-    ('C. Independencia 789', 'Tlacolula', '16.9265,-96.4682');
+('San Pedro Pochutla', 'San Pedro Pochutla', ''),
+('Santa María Tonameca', 'Santa María Tonameca', ''),
+('Santa María Huatulco', 'Santa María Huatulco', ''),
+('Puerto Ángel', 'San Pedro Pochutla', ''),
+('La Bocana', 'Santa María Huatulco', ''),
+('Playa Carrizalillo', 'Puerto Escondido', ''),
+('Playa Manzanillo', 'Puerto Escondido', '');
 
-INSERT INTO tipo (tipo) VALUES
-    ('General'),
-    ('Pediátrico'),
-    ('Urgencias');
+INSERT INTO caracteristicas (tipo_arena, tipo_mar, oleaje, extension) VALUES
+('Fina y dorada', 'Pacífico', 'Fuerte', 1.75),
+('Dorada', 'Pacífico', 'Moderado', 1.30),
+('Fina y blanca', 'Pacífico', 'Suave', 0.50),
+('Dorada', 'Pacífico', 'Moderado', 1.20),
+('Fina y blanca', 'Pacífico', 'Suave', 0.80),
+('Blanca', 'Pacífico', 'Moderado', 0.30),
+('Blanca', 'Pacífico', 'Moderado', 0.40);
 
-INSERT INTO medicamento (nombre, precio) VALUES
-    ('Paracetamol', 25.00),
-    ('Ibuprofeno', 30.50),
-    ('Amoxicilina', 45.75);
+INSERT INTO ambiente (protegida, especies_migratorias, nivel_contaminacion) VALUES
+(0, 'Delfines, ballenas', 'Medio'),
+(1, 'Tortugas marinas', 'Bajo'),
+(1, 'Tortugas marinas, aves migratorias', 'Bajo'),
+(0, 'Delfines, tortugas', 'Medio'),
+(1, 'Aves migratorias', 'Bajo'),
+(1, 'Ninguna', 'Alto'),
+(1, 'Ninguna', 'Bajo');
 
-INSERT INTO aparato (nombre) VALUES
-    ('Tomógrafo'),
-    ('Resonancia Magnética'),
-    ('Ecógrafo');
+INSERT INTO popularidad (facilidad_acceso, costo_entrada, visitantes_mensuales, e_popularidad) VALUES
+('Media', 0.00, 15000, 7),
+('Media', 0.00, 10000, 6),
+('Alta', 0.00, 25000, 8),
+('Media', 0.00, 12000, 6),
+('Media', 0.00, 1000, 5),
+('Alta', 0.00, 18000, 7),
+('Alta', 0.00, 16000, 7);
 
-INSERT INTO hospital (nombre, ubicacion_id, tipo_id) VALUES
-    ('Hospital Central', 1, 1),
-    ('Hospital Pediátrico', 2, 2),
-    ('Clínica Urgencias', 3, 3);
+INSERT INTO actividades (surf, buceo, camping, nudismo_permitido) VALUES
+(1, 1, 1, 1),
+(0, 1, 1, 0),
+(0, 1, 1, 0),
+(0, 0, 0, 0),
+(1, 0, 0, 0),
+(1, 1, 1, 0),
+(1, 1, 1, 0);
 
-INSERT INTO paciente (nombre, hospital_id) VALUES
-    ('Juan Pérez', 1),
-    ('María López', 2),
-    ('Carlos Hernández', 1);
-
-INSERT INTO personal (nombre, rol, hospital_id) VALUES
-    ('Dr. Manuel Sánchez', 'Director', 1),
-    ('Enfermera Ana Gómez', 'Enfermera', 1),
-    ('Dr. Luis Martínez', 'Médico Urgencias', 3);
-
-INSERT INTO inventario_medicamentos (hospital_id, medicamento_id, cantidad_stock, precio_unitario) VALUES
-    (1, 1, 200, 24.50),
-    (1, 2, 150, 29.75),
-    (2, 3, 100, 44.00);
-
-INSERT INTO hospital_has_aparato (hospital_id, aparato_id, cantidad, estado, fecha_adquisicion) VALUES
-    (1, 1, '1', 'Operativo', '2022-01-10'),
-    (1, 3, '2', 'Operativo', '2021-07-20'),
-    (3, 2, '1', 'Mantenimiento', '2023-03-05');
+INSERT INTO playa (nombre, id_ubicacion, id_caracteristicas, id_ambiente, id_popularidad, id_actividad) VALUES
+('Zipolite', 1, 1, 1, 1, 1),
+('San Agustinillo', 2, 2, 2, 2, 2),
+('Bahías de Huatulco', 3, 3, 3, 3, 3),
+('Puerto Ángel', 4, 4, 4, 4, 4),
+('La Bocana', 5, 5, 5, 5, 5),
+('Playa Carrizalillo', 6, 6, 6, 6, 6),
+('Playa Manzanillo', 7, 7, 7, 7, 7);
